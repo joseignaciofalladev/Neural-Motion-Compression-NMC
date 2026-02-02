@@ -1,4 +1,3 @@
-// Neural Motion Compression (NMC) - Runtime Reference Implementation (C++17)
 // - PoseAtlas: cache of decoded poses (per token/time)
 // - MicroDecoder: tiny MLP-based decoder prototype (quantized-friendly)
 // - DecodeScheduler: schedules decode jobs, supports callbacks
@@ -413,4 +412,5 @@ int main() {
 
     cout << "NMC runtime prototype done.\n";
     return 0;
+
 }
