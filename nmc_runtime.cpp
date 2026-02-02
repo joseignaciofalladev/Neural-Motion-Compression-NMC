@@ -1,11 +1,9 @@
 // - PoseAtlas: cache of decoded poses (per token/time)
 // - MicroDecoder: tiny MLP-based decoder prototype (quantized-friendly)
 // - DecodeScheduler: schedules decode jobs, supports callbacks
-//
+
 // Intended as a reference runtime module to integrate with engine.
 // Replace MicroDecoder internals with real NN inference (GPU/SPU) in production.
-//
-// Build: g++ -std=c++17 nmc_runtime.cpp -pthread -O2 -o nmc_runtime
 
 #include <bits/stdc++.h>
 using namespace std;
@@ -414,4 +412,5 @@ int main() {
     return 0;
 
 }
+
 
