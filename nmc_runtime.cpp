@@ -8,7 +8,7 @@
 #include <bits/stdc++.h>
 using namespace std;
 
-/* ----------------------------- Config / Tunables ----------------------------- */
+// Config / Tunables
 
 constexpr int MAX_JOINTS = 48;          // typical skeleton joints (adjustable)
 constexpr int LATENT_SIZE = 32;        // size of latent vector (example)
@@ -19,7 +19,7 @@ constexpr int ATLAS_CAPACITY = 4096;   // number of pose slots in atlas
 constexpr int MAX_DECODE_THREADS = 4;  // concurrency (map to SPUs/compute in prod)
 constexpr int DECODE_JOB_BATCH = 4;    // batch size for throughput
 
-/* ----------------------------- Utility types -------------------------------- */
+// Utility types
 
 struct LatentToken {
     // compact representation of latent (quantized or float)
@@ -412,5 +412,6 @@ int main() {
     return 0;
 
 }
+
 
 
