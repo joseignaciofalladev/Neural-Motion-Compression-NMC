@@ -339,7 +339,6 @@ int main() {
     MicroDecoder decoder;
     PoseAtlas atlas(1024);
     DecodeScheduler scheduler(decoder, atlas);
-
     // Simulate latent tokens produced by cooker (in real: loaded from disk/ASTRA)
     vector<LatentToken> simulatedTokens;
     simulatedTokens.reserve(200);
@@ -353,7 +352,6 @@ int main() {
             simulatedTokens.push_back(lt);
         }
     }
-
     // Simulate game loop: entities require poses; if missing schedule decode
     const int NUM_ENTITIES = 300;
     struct EntityReq { uint32_t id; uint32_t clip; uint32_t frame; };
@@ -361,13 +359,11 @@ int main() {
     for (int i=0;i<NUM_ENTITIES;++i) {
         entities.push_back({(uint32_t)i, (uint32_t)(i%50), (uint32_t)(i%4)});
     }
-
     atomic<int> callbacks=0;
     auto cb = [&](const PoseKey &k, bool ok){
         callbacks.fetch_add(1);
         // in engine: upload atlas pose slot to GPU skinning buffer
     };
-
     // Request poses: many will miss and trigger decode
     for (auto &e : entities) {
         PoseKey k{e.clip, e.frame};
@@ -385,10 +381,8 @@ int main() {
             // use p immediately
         }
     }
-
     // wait for background decode to finish (in prod: continuous service)
     scheduler.flush();
-
     // Validate that atlas contains expected entries
     int found=0;
     for (auto &e : entities) {
@@ -398,7 +392,6 @@ int main() {
     }
     cout << "Decoded poses available in atlas: " << found << " / " << NUM_ENTITIES << "\n";
     cout << "Callback count: " << callbacks.load() << "\n";
-
     // example: get a pose and print joint0 quat
     PoseKey sampleKey{0,0};
     Pose samplePose;
@@ -407,11 +400,6 @@ int main() {
         cout << samplePose.q[0] << ", " << samplePose.q[1] << ", "
              << samplePose.q[2] << ", " << samplePose.q[3] << "\n";
     }
-
     cout << "NMC runtime prototype done.\n";
     return 0;
-
 }
-
-
-
