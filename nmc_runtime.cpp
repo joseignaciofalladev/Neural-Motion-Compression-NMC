@@ -1,7 +1,6 @@
 // - PoseAtlas: cache of decoded poses (per token/time)
 // - MicroDecoder: tiny MLP-based decoder prototype (quantized-friendly)
 // - DecodeScheduler: schedules decode jobs, supports callbacks
-
 // Intended as a reference runtime module to integrate with engine.
 // Replace MicroDecoder internals with real NN inference (GPU/SPU) in production.
 
@@ -9,18 +8,15 @@
 using namespace std;
 
 // Config / Tunables
-
 constexpr int MAX_JOINTS = 48;          // typical skeleton joints (adjustable)
 constexpr int LATENT_SIZE = 32;        // size of latent vector (example)
 constexpr int POSE_QUAT_COMPONENTS = 4; // quaternion (x,y,z,w)
 constexpr int POSE_STRIDE = MAX_JOINTS * POSE_QUAT_COMPONENTS;
-
 constexpr int ATLAS_CAPACITY = 4096;   // number of pose slots in atlas
 constexpr int MAX_DECODE_THREADS = 4;  // concurrency (map to SPUs/compute in prod)
 constexpr int DECODE_JOB_BATCH = 4;    // batch size for throughput
 
 // Utility types
-
 struct LatentToken {
     // compact representation of latent (quantized or float)
     // In cooker pipeline this would be quantized bytes. Here we use float for prototype.
@@ -33,7 +29,6 @@ struct Pose {
     // flattened array: joint0 quat(x,y,z,w), joint1 ...
     // store as floats for runtime skinning upload
     vector<float> q; // size = MAX_JOINTS * 4
-
     Pose() { q.assign(POSE_STRIDE, 0.0f); }
 };
 
@@ -52,8 +47,7 @@ struct PoseKeyHash {
     }
 };
 
-/* ----------------------------- Math helpers --------------------------------- */
-
+/* Math helpers */
 // minimal quaternion normalization + utility
 static inline void quat_normalize(float q[4]) {
     float x=q[0], y=q[1], z=q[2], w=q[3];
