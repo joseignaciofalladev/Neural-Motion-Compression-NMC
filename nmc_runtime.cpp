@@ -69,15 +69,14 @@ struct DetermRNG {
     float nextFloat() { return (nextU32() / float(0xffffffffu)); }
 };
 
-/* ----------------------------- MicroDecoder ---------------------------------
+/* MicroDecoder
    Prototype micro-decoder: tiny MLP that maps a latent -> joint quaternion deltas.
    In production this is replaced by an NN exported from training (quantized).
    Design goals:
    - Small memory footprint
    - Deterministic
    - SIMD / SPU friendly (no dynamic allocations)
------------------------------------------------------------------------------ */
-
+*/
 class MicroDecoder {
 public:
     MicroDecoder() {
@@ -161,11 +160,10 @@ private:
     }
 };
 
-/* ----------------------------- PoseAtlas -----------------------------------
+/* PoseAtlas
    A simple thread-safe pose cache mapping (tokenID, frameIndex) -> Pose slot
    LRU eviction policy. On miss, engine should schedule a decode job.
------------------------------------------------------------------------------ */
-
+*/
 class PoseAtlas {
 public:
     PoseAtlas(size_t capacity = ATLAS_CAPACITY) : _capacity(capacity) {}
@@ -197,7 +195,6 @@ public:
         lock_guard<mutex> g(_mutex);
         return _map.find(key) != _map.end();
     }
-
     size_t size() const {
         lock_guard<mutex> g(_mutex);
         return _map.size();
@@ -208,7 +205,6 @@ private:
         Pose pose;
         uint64_t lastUsed;
     };
-
     unordered_map<PoseKey, Entry, PoseKeyHash> _map;
     mutable mutex _mutex;
     size_t _capacity;
