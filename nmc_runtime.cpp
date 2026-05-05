@@ -167,7 +167,6 @@ private:
 class PoseAtlas {
 public:
     PoseAtlas(size_t capacity = ATLAS_CAPACITY) : _capacity(capacity) {}
-
     // query, returns true if pose present and copies into outPose
     bool query(const PoseKey &key, Pose &outPose) {
         lock_guard<mutex> g(_mutex);
@@ -178,7 +177,6 @@ public:
         outPose = it->second.pose;
         return true;
     }
-
     // insert or overwrite
     void insert(const PoseKey &key, Pose &&pose) {
         lock_guard<mutex> g(_mutex);
@@ -189,7 +187,6 @@ public:
         _map.emplace(key, std::move(e));
         // ensure quick lookup: map is unordered_map with PoseKeyHash
     }
-
     // convenience: check presence
     bool contains(const PoseKey &key) {
         lock_guard<mutex> g(_mutex);
@@ -230,11 +227,10 @@ private:
     }
 };
 
-/* ----------------------------- DecodeScheduler ------------------------------
+/* DecodeScheduler
    Schedules decode jobs (simulated async threads). In production this hooks to SPU
    or GPU compute queue. Provides callback when pose is ready.
------------------------------------------------------------------------------ */
-
+*/
 class DecodeScheduler {
 public:
     using DecodeCallback = function<void(const PoseKey&, bool /*success*/)>;
@@ -312,13 +308,13 @@ private:
     }
 };
 
-/* ----------------------------- Usage Example ------------------------------- 
+/* Usage Example
    Example main simulates entities requesting animation frames. For a real engine
    integrate:
    - Cooker produces LatentToken streams stored on disk or networked.
    - Scheduler replaced/integrated with SPU jobs or GPU compute.
    - PoseAtlas upload the pose buffer to GPU skinning SSBO / texture.
------------------------------------------------------------------------------ */
+*/
 
 int main() {
     ios::sync_with_stdio(false);
